@@ -1,32 +1,38 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"image"
+	"image/color"
+
+	"golang.org/x/tour/pic"
 )
 
-type MyError struct {
+type Image struct {
 
-	When time.Time
-	What string
+	Width int
+	Height int
 }
 
-func (e *MyError) Error() string {
-
-	return fmt.Sprintf("at %v, %s", e.When, e.What)
+// ColorModel returns image's color model
+func (i Image) ColorModel() color.Model {
+	
+	return color.RGBAModel
 }
 
-func run() error {
-
-	return &MyError{
-		time.Now(),
-		"it didn't work",
-	}
+// Bounds returns domain for which At can return non-zero color
+func (i Image) Bounds() image.Rectangle {
+	
+	return image.Rect(0, 0, i.Width, i.Height)
 }
 
+// At returns color of pixel at (x, y)
+func (i Image) At(x, y int) color.Color {
+	v := uint8(x ^ y)
+	return color.RGBA{v, v, 255, 255}
+}
 func main() {
 
-	if err := run(); err != nil {
-		fmt.Println(err)
-	}
+	// initialize image with specific dimensions
+	m := Image{256, 256}
+	pic.ShowImage(m)
 }

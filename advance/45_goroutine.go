@@ -14,7 +14,24 @@ func sayHello() {
 	}
 }
 
+func f(from string) {
+	for i := range 3{
+		fmt.Println(from, ":", i)
+	}
+}
+
 func main() {
+
+	f("direct call") // direct call
+	go f("goroutine call") // call as a goroutine
+
+	go func(msg string) {
+		fmt.Println(msg)
+	}("going")
+
+	time.Sleep(time.Second)
+	fmt.Println("done")
+
 	go sayHello() // start a new goroutine
 
 	// main goroutine
